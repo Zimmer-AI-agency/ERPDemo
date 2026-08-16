@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Design tokens. Every colour in the app comes from here, never hard-coded.
+   Light-only by design: this is an internal ERP shown on a client's projector,
+   and the spec (§4) defines a single light palette.
+   Radius rule (applied everywhere): surfaces 12px, controls 8px, status pills
+   full-round. Nothing else.
+--------------------------------------------------------------------------- */
+@theme {
+  --font-sans: 'Vazirmatn Variable', system-ui, sans-serif;
+
+  /* Brand kit. brand / light / dark / ink and the channel form come straight
+     from the kit; -tint is ours, the 10% wash used for selected rows, active
+     nav items and brand badges. #A379FF is a lighter purple, not a background:
+     putting text on it would fail contrast, so the wash is separate. */
+  --color-brand: #7f5af0;
+  --color-brand-light: #a379ff;
+  --color-brand-dark: #7e4ee6;
+  --color-brand-ink: #5b2cc0;
+  --brand-rgb: 127 90 240;
+  --color-brand-tint: rgb(127 90 240 / 0.1);
+  --color-brand-tint-strong: rgb(127 90 240 / 0.16);
+
+  --color-canvas: #f8f7fc;
+  --color-surface: #ffffff;
+  --color-ink: #1f1b2d;
+  --color-ink-soft: #6b6478;
+  --color-line: #e7e3ed;
+
+  /* Operational status. Purple is never a status colour. */
+  --color-ok: #059669;
+  --color-ok-bg: #ecfdf5;
+  --color-warn: #b45309;
+  --color-warn-bg: #fffbeb;
+  --color-crit: #dc2626;
+  --color-crit-bg: #fef2f2;
+  --color-info: #2563eb;
+  --color-info-bg: #eff6ff;
+
+  --radius-surface: 12px;
+  --radius-control: 8px;
+}
+
+html {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  /* Persian digits everywhere the browser renders numbers itself. */
+  font-feature-settings: 'ss02';
+}
+
+body {
+  margin: 0;
+}
+
+/* Native <dialog> gives us focus trapping, Escape-to-close and the top layer
+   for free. We only style it. */
+dialog {
+  border: 0;
+  padding: 0;
+  max-width: none;
+  max-height: none;
+  color: var(--color-ink);
+  background: transparent;
+}
+
+dialog::backdrop {
+  background: rgb(31 27 45 / 0.32);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog[open] {
+    animation: panel-in 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .page-enter {
+    animation: page-in 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .row-enter {
+    animation: row-in 700ms ease-out;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* A new table row briefly holds the brand tint, then settles. */
+@keyframes row-in {
+  from {
+    background-color: var(--color-brand-tint);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus is never removed, only restyled. */
+:where(a, button, input, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
