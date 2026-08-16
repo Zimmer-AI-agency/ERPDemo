@@ -4,6 +4,7 @@ import { useAuth } from '../store/useAuth'
 import { ROLE_LABELS } from '../data/rbac'
 import { COMPANY_NAME } from '../data/garment'
 import { Badge, Drawer } from './ui'
+import mark from '../assets/zimmer-mark.png'
 
 /** Two filters, one list: the role must hold the permission, and the module
  *  must have been switched on at setup. Unselected modules simply vanish. */
@@ -73,9 +74,7 @@ function Brand() {
   return (
     <>
       <div className="flex items-center gap-2">
-        <span className="grid size-7 place-items-center rounded-[8px] bg-brand text-[13px] font-bold text-white">
-          Z
-        </span>
+        <img src={mark} alt="" className="size-7" />
         <span className="text-sm font-bold tracking-tight">زیمر</span>
       </div>
       <p className="mt-2 text-xs text-ink-soft">

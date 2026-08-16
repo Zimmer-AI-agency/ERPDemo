@@ -7,6 +7,7 @@ import { COMPANY_NAME, PRODUCTION_LINES, SEASON, STYLES, WORK_ORDERS } from '../
 import { ALL_MODULES, MODULE_BLURBS, MODULE_LABELS, useAuth } from '../store/useAuth'
 import { Button } from '../components/ui'
 import { num } from '../lib/format'
+import mark from '../assets/zimmer-mark.png'
 
 /** Two steps, one screen: pick the modules this prospect actually runs, then
  *  pick whose eyes you want to see the workspace through. */
@@ -28,9 +29,7 @@ export function DemoEntryPage() {
       <section className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-16">
         <div className="mx-auto w-full max-w-2xl">
           <div className="flex items-center gap-2">
-            <span className="grid size-8 place-items-center rounded-[8px] bg-brand text-sm font-bold text-white">
-              Z
-            </span>
+            <img src={mark} alt="" className="size-8" />
             <span className="text-base font-bold tracking-tight">زیمر</span>
             <span className="ms-1 text-[13px] text-ink-soft">نسخه نمایشی</span>
           </div>
