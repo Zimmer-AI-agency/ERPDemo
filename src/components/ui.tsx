@@ -377,6 +377,7 @@ export function Drawer({
   title,
   subtitle,
   width = 480,
+  side = 'end',
   children,
 }: {
   open: boolean
@@ -384,15 +385,20 @@ export function Drawer({
   title: string
   subtitle?: string
   width?: number
+  /** 'end' is the left edge in RTL, where detail panels belong. 'start' is the
+   *  right edge, reserved for the mobile navigation — it replaces the sidebar,
+   *  so it has to come from where the sidebar lives. */
+  side?: 'start' | 'end'
   children: ReactNode
 }) {
   const ref = useDialog(open, onClose)
   return (
     <dialog
       ref={ref}
-      // RTL layout: the main navigation owns the right edge, so panels enter
-      // from the left.
-      className="fixed inset-y-0 start-0 m-0 h-full max-h-none w-full"
+      data-side={side}
+      className={`fixed inset-y-0 m-0 h-full max-h-none w-full ${
+        side === 'start' ? 'start-0' : 'end-0'
+      }`}
       style={{ maxWidth: width }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >

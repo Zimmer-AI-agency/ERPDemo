@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { Bell, ChevronDown, LogOut, MessagesSquare, Search, Sparkles } from 'lucide-react'
+import { Bell, ChevronDown, LogOut, Menu, MessagesSquare, Search, Sparkles } from 'lucide-react'
 import { INVOICES, TODAY_LABEL } from '../data/mock'
 import { COMPANY_NAME, EXTERNAL_ACCOUNTING } from '../data/garment'
 import { PERSONAS, ROLE_LABELS } from '../data/rbac'
@@ -15,7 +15,7 @@ const PERIODS: { id: Period; label: string }[] = [
   { id: 'year', label: 'امسال' },
 ]
 
-export function Header({ onAskAi }: { onAskAi: () => void }) {
+export function Header({ onAskAi, onOpenNav }: { onAskAi: () => void; onOpenNav: () => void }) {
   const navigate = useNavigate()
   const [searchOpen, setSearchOpen] = useState(false)
   const [bellOpen, setBellOpen] = useState(false)
@@ -51,7 +51,11 @@ export function Header({ onAskAi }: { onAskAi: () => void }) {
   }, [query, customers, orders, products])
 
   return (
-    <header className="flex h-16 items-center gap-3 border-b border-line bg-surface px-5">
+    <header className="flex h-16 items-center gap-2 border-b border-line bg-surface px-4 sm:gap-3 sm:px-5">
+      <Button size="sm" className="md:hidden" onClick={onOpenNav} aria-label="باز کردن منو">
+        <Menu size={16} strokeWidth={1.5} />
+      </Button>
+
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold">
           {COMPANY_NAME} — {new Date().getHours() < 12 ? 'صبح بخیر' : 'وقت بخیر'}، {userName}
@@ -60,35 +64,47 @@ export function Header({ onAskAi }: { onAskAi: () => void }) {
       </div>
 
       {accountingMode && (
+        <span className="hidden xl:inline-flex">
         <Badge tone={accountingMode === 'integration' ? 'ok' : 'brand'}>
           {accountingMode === 'integration'
             ? `حسابداری: متصل به ${EXTERNAL_ACCOUNTING.name}`
             : 'حسابداری: ماژول داخلی زیمر'}
         </Badge>
+        </span>
       )}
 
       {canMessage && (
-        <Button size="sm" onClick={() => navigate('/messages')} aria-label="گفتگوی داخلی">
+        <Button
+          size="sm"
+          className="hidden sm:inline-flex"
+          onClick={() => navigate('/messages')}
+          aria-label="گفتگوی داخلی"
+        >
           <MessagesSquare size={15} strokeWidth={1.5} />
         </Button>
       )}
 
-      <Button size="sm" onClick={() => setSearchOpen(true)} className="w-44 !justify-start">
+      <Button
+        size="sm"
+        onClick={() => setSearchOpen(true)}
+        aria-label="جستجوی سریع"
+        className="lg:w-44 lg:!justify-start"
+      >
         <Search size={15} strokeWidth={1.5} className="text-ink-soft" />
-        <span className="text-ink-soft">جستجوی سریع...</span>
+        <span className="hidden text-ink-soft lg:inline">جستجوی سریع...</span>
       </Button>
 
       {canUseAi && (
-        <Button variant="primary" size="sm" onClick={onAskAi}>
+        <Button variant="primary" size="sm" onClick={onAskAi} aria-label="پرسش از هوش مصنوعی">
           <Sparkles size={15} strokeWidth={1.5} />
-          پرسش از هوش مصنوعی
+          <span className="hidden lg:inline">پرسش از هوش مصنوعی</span>
         </Button>
       )}
 
       <Select<Period>
         aria-label="بازه زمانی"
         size="sm"
-        className="w-32"
+        className="hidden w-32 lg:block"
         value={period}
         options={PERIODS.map((p) => ({ value: p.id, label: p.label }))}
         onChange={setPeriod}
